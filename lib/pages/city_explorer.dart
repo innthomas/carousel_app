@@ -1,3 +1,5 @@
+import 'package:carousel_app/model/detail.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 final imagesList = [
@@ -43,15 +45,81 @@ class _CityExplorerPageState extends State<CityExplorerPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: PageView.builder(
-        itemBuilder: (context, index) {
-          return itemBuilder(index);
-        },
-        controller: _pageController,
-        itemCount: imagesList.length,
-        pageSnapping: true,
-        onPageChanged: _onPageChanged,
-        physics: ClampingScrollPhysics(),
+      drawer: Drawer(),
+      appBar: AppBar(
+        actions: <Widget>[
+          IconButton(icon: Icon(Icons.search), onPressed: null),
+          IconButton(icon: Icon(Icons.message), onPressed: null),
+        ],
+        centerTitle: true,
+        title: Text("watt"),
+      ),
+      body: Container(
+        child: Padding(
+          padding: const EdgeInsets.only(top: 8.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Container(
+                height: 200.0,
+                child: PageView.builder(
+                  itemBuilder: (context, index) {
+                    return itemBuilder(index);
+                  },
+                  controller: _pageController,
+                  itemCount: imagesList.length,
+                  pageSnapping: true,
+                  onPageChanged: _onPageChanged,
+                  physics: ClampingScrollPhysics(),
+                ),
+              ),
+              detailsBuilder(currentPage),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget detailsBuilder(index) {
+    return AnimatedBuilder(
+      animation: _pageController,
+      builder: (context, child) {
+        return child;
+      },
+      child: Expanded(
+        child: Column(
+          children: <Widget>[
+            Text(
+              detailsList[index].title,
+              style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.w600),
+            ),
+            SizedBox(
+              height: 10.0,
+            ),
+            Container(
+              width: 80.0,
+              height: 5.0,
+              color: Colors.black,
+              child: Text(
+                detailsList[index].title,
+                style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w800),
+              ),
+            ),
+            Text(
+              detailsList[index].description,
+              style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w600),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Text(
+              "Read more ...",
+              style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -68,7 +136,7 @@ class _CityExplorerPageState extends State<CityExplorerPage> {
           return Align(
             alignment: Alignment.topCenter,
             child: Container(
-              height: Curves.easeIn.transform(value) * 600,
+              height: Curves.easeIn.transform(value) * 200,
               margin: EdgeInsets.only(left: 20.0, right: 20.0, bottom: 10.0),
               child: child,
             ),
@@ -79,7 +147,7 @@ class _CityExplorerPageState extends State<CityExplorerPage> {
             child: Container(
               height:
                   Curves.easeIn.transform(index == 0 ? value : value * 0.5) *
-                      600,
+                      200,
               margin: EdgeInsets.only(left: 20.0, right: 20.0, bottom: 10.0),
               child: child,
             ),
